@@ -1,6 +1,6 @@
 {
     "name": "seriallency",
-    "version": "0.0.1",
+    "version": "0.0.0",
     "description": "Serialize a bunch of Promises according to a specific field",
     "main": "dist/src/index.js",
     "types": "dist/src/index.d.ts",
@@ -17,7 +17,7 @@
     "keywords": [
       "concurrent",
       "promise",
-      "control"
+      "serialize"
     ],
     "author": "David López Pérez",
     "license": "Apache-2.0",
