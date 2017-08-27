@@ -1,38 +1,38 @@
 {
-    "name": "seriallency",
-    "version": "0.0.0",
-    "description": "Serialize a bunch of Promises according to a specific field",
-    "main": "dist/src/index.js",
-    "types": "dist/src/index.d.ts",
-    "scripts": {
-      "compile": "tsc --project tsconfig.json",
-      "compile-watch": "tsc --project tsconfig.json --watch",
-      "test": "tsc --project tsconfig.json && mocha dist/test/**/*.spec.js",
-      "test-watch": "mocha dist/test/**/*.spec.js --watch"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/davloperez/seriallency.git"
-    },
-    "keywords": [
-      "concurrent",
-      "promise",
-      "serialize"
-    ],
-    "author": "David López Pérez",
-    "license": "Apache-2.0",
-    "bugs": {
-      "url": "https://github.com/davloperez/seriallency/issues"
-    },
-    "homepage": "https://github.com/davloperez/seriallency#readme",
-    "devDependencies": {
-      "@types/node": "8.0.25",
-      "@types/chai": "4.0.4",
-      "@types/chai-as-promised": "0.0.31",
-      "@types/mocha": "2.2.42",
-      "typescript": "2.4.2",
-      "chai": "4.1.1",
-      "chai-as-promised": "7.1.1",
-      "mocha": "3.5.0"
-    }
+  "name": "seriallency",
+  "version": "0.0.1",
+  "description": "Serialize a bunch of Promises according to a specific field",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "compile": "tsc --project tsconfig.json",
+    "compile-watch": "tsc --project tsconfig.json --watch",
+    "test": "tsc --project tsconfig.json && mocha dist/test/**/*.spec.js",
+    "test-watch": "mocha dist/test/**/*.spec.js --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davloperez/seriallency.git"
+  },
+  "keywords": [
+    "concurrent",
+    "promise",
+    "serialize"
+  ],
+  "author": "David López Pérez",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/davloperez/seriallency/issues"
+  },
+  "homepage": "https://github.com/davloperez/seriallency#readme",
+  "devDependencies": {
+    "@types/node": "8.0.25",
+    "@types/chai": "4.0.4",
+    "@types/chai-as-promised": "0.0.31",
+    "@types/mocha": "2.2.42",
+    "typescript": "2.4.2",
+    "chai": "4.1.1",
+    "chai-as-promised": "7.1.1",
+    "mocha": "3.5.0"
   }
+}
