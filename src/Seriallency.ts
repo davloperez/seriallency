@@ -8,7 +8,7 @@ export class Seriallency extends EventEmitter {
     };
     private inProcess: {
         [key: string]: SeriallencyQueueItem
-    }
+    };
     constructor() {
         super();
         this.queues = {};
@@ -51,7 +51,7 @@ export class Seriallency extends EventEmitter {
 
     private proceed(serializeBy: string): void {
         if (typeof this.inProcess[serializeBy] === 'undefined' && typeof this.queues[serializeBy] !== 'undefined') {
-            let item = this.queues[serializeBy].splice(0, 1)[0];
+            const item = this.queues[serializeBy].splice(0, 1)[0];
             if (this.queues[serializeBy].length === 0) {
                 delete this.queues[serializeBy];
             }
