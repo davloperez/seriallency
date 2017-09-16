@@ -1,6 +1,6 @@
 {
   "name": "seriallency",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Serialize a bunch of Promises according to a specific field",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
