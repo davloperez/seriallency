@@ -1,19 +1,63 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Seriallency = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var Seriallency = require('../dist/src/Seriallency');
+window.Seriallency = window.Seriallency || Seriallency.Seriallency;
+},{"../dist/src/Seriallency":2}],2:[function(require,module,exports){
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const events_1 = require("events");
-class Seriallency extends events_1.EventEmitter {
-    constructor() {
-        super();
-        this.queues = {};
-        this.inProcess = {};
+var events_1 = require("events");
+/**
+ * Use this class to serialize a bunch of promises acording to a specific field. Like a in-memory-queue,
+ * Seriallency instances store internally the functions reference and params of returning-promise functions
+ * that must be execute one after another in some cases, but concurrently in others.
+ *
+ * @export
+ * @class Seriallency
+ * @extends {EventEmitter}
+ */
+var Seriallency = (function (_super) {
+    __extends(Seriallency, _super);
+    /**
+     * Creates an instance of Seriallency.
+     * @memberof Seriallency
+     */
+    function Seriallency() {
+        var _this = _super.call(this) || this;
+        _this.queues = {};
+        _this.inProcess = {};
+        return _this;
     }
-    getQuantityProcessing() {
+    /**
+     * Get the quantity of processing Promises (pending to be resolved or rejected) right now.
+     *
+     * @returns {number}
+     * @memberof Seriallency
+     */
+    Seriallency.prototype.getQuantityProcessing = function () {
         return Object.keys(this.inProcess).length;
-    }
-    getQueueSize(serializeBy) {
+    };
+    /**
+     * Get the aggregated queues size of internal state of this Seriallency instance. If a 'serializeBy'
+     * string is supplied, it returns the current queue size for that specific serializing key.
+     *
+     * @param {string} [serializeBy] Queue name to get queue size.
+     * @returns {number} The queuse size for the specified serilizing key, or the aggregated queues size if
+     * serializeBy param is undefined.
+     * @memberof Seriallency
+     */
+    Seriallency.prototype.getQueueSize = function (serializeBy) {
+        var _this = this;
         if (typeof serializeBy === 'undefined') {
-            return Object.keys(this.queues).reduce((prev, key) => prev + this.queues[key].length, 0);
+            return Object.keys(this.queues).reduce(function (prev, key) { return prev + _this.queues[key].length; }, 0);
         }
         else if (serializeBy in this.queues) {
             return this.queues[serializeBy].length;
@@ -21,8 +65,17 @@ class Seriallency extends events_1.EventEmitter {
         else {
             return 0;
         }
-    }
-    push(item) {
+    };
+    /**
+     * Queue new SeriallencyItem (that contains the 'serializeBy' string, function to be executed and params).
+     * If queue for that serializeBy is empty, it launch immediatelly the supplied function with the supplied
+     * params.
+     *
+     * @param {ISeriallencyItem} item An object that contains the 'serializeBy' string by which this item must be
+     * serialized, the function that must be executed and the params to execute that function.
+     * @memberof Seriallency
+     */
+    Seriallency.prototype.push = function (item) {
         if (typeof item !== 'object') {
             throw new Error('"item" to serialize must be an object');
         }
@@ -40,10 +93,10 @@ class Seriallency extends events_1.EventEmitter {
         }
         this.queues[item.serializeBy].push(item);
         this.proceed(item.serializeBy);
-    }
-    proceed(serializeBy) {
+    };
+    Seriallency.prototype.proceed = function (serializeBy) {
         if (typeof this.inProcess[serializeBy] === 'undefined' && typeof this.queues[serializeBy] !== 'undefined') {
-            let item = this.queues[serializeBy].splice(0, 1)[0];
+            var item = this.queues[serializeBy].splice(0, 1)[0];
             if (this.queues[serializeBy].length === 0) {
                 delete this.queues[serializeBy];
             }
@@ -51,21 +104,22 @@ class Seriallency extends events_1.EventEmitter {
             Promise.resolve(item.fn.apply(item.thisObj, item.params))
                 .then(this.onPromiseResolved.bind(this, item), this.onPromiseRejected.bind(this, item));
         }
-    }
-    onPromiseResolved(item, result) {
+    };
+    Seriallency.prototype.onPromiseResolved = function (item, result) {
         delete this.inProcess[item.serializeBy];
         this.proceed(item.serializeBy);
         this.emit('resolved', result, item);
-    }
-    onPromiseRejected(item, reason) {
+    };
+    Seriallency.prototype.onPromiseRejected = function (item, reason) {
         delete this.inProcess[item.serializeBy];
         this.proceed(item.serializeBy);
         this.emit('rejected', reason, item);
-    }
-}
+    };
+    return Seriallency;
+}(events_1.EventEmitter));
 exports.Seriallency = Seriallency;
 
-},{"events":2}],2:[function(require,module,exports){
+},{"events":3}],3:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -369,5 +423,4 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}]},{},[1])(1)
-});
+},{}]},{},[1]);

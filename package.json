@@ -6,7 +6,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "compile": "tsc --project tsconfig.json",
-    "compile-browserify": "browserify -e dist/src/Seriallency.js -s Seriallency -o client/seriallency.js",
+    "compile-browserify": "browserify -e client/export.js -o client/seriallency.js",
     "compile-uglify-es": "uglifyjs client/seriallency.js -o client/seriallency.min.js -c",
     "compile-watch": "tsc --project tsconfig.json --watch",
     "test": "tsc --project tsconfig.json && mocha dist/test/**/*.spec.js",
