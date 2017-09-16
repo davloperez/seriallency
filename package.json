@@ -6,6 +6,8 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "compile": "tsc --project tsconfig.json",
+    "compile-browserify": "browserify -e dist/src/Seriallency.js -s Seriallency -o client/seriallency.js",
+    "compile-uglify-es": "uglifyjs client/seriallency.js -o client/seriallency.min.js -c",
     "compile-watch": "tsc --project tsconfig.json --watch",
     "test": "tsc --project tsconfig.json && mocha dist/test/**/*.spec.js",
     "test-watch": "mocha dist/test/**/*.spec.js --watch",
@@ -27,10 +29,11 @@
   },
   "homepage": "https://github.com/davloperez/seriallency#readme",
   "devDependencies": {
-    "@types/node": "8.0.25",
     "@types/chai": "4.0.4",
     "@types/chai-as-promised": "0.0.31",
     "@types/mocha": "2.2.42",
+    "@types/node": "8.0.25",
+    "browserify": "14.4.0",
     "chai": "4.1.1",
     "chai-as-promised": "7.1.1",
     "istanbul": "0.4.5",
@@ -40,7 +43,8 @@
     "ts-node": "3.3.0",
     "tslint": "5.7.0",
     "tslint-no-unused-expression-chai": "0.0.2",
-    "typescript": "2.4.2"
+    "typescript": "2.4.2",
+    "uglify-es": "3.1.0"
   },
   "nyc": {
     "include": [
