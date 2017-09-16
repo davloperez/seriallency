@@ -3,6 +3,7 @@ Serialize a bunch of Promises according to a specific field
 
 [![Build Status](https://travis-ci.org/davloperez/seriallency.svg?branch=master)](https://travis-ci.org/davloperez/seriallency)
 [![Build Status](https://img.shields.io/badge/node-v6.10.0-blue.svg?style=flat)](https://nodejs.org/en/blog/release/v6.10.0/)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-green.svg?style=flat)](https://nodejs.org/en/blog/release/v6.10.0/)
 
 With this module you can serialize multiple Promises by a specific key, so you can be sure that only a single promise for that key. Seriallency uses an internal dictionary to store promises if it already exists one previous Promise associated to the same key. For example:
 

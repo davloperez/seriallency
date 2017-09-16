@@ -1,6 +1,5 @@
 import { EventEmitter } from "events";
-import { SeriallencyQueueItem } from "./SeriallencyQueueItem";
-import { SeriallencyItem } from "./SeriallencyItem";
+import { ISeriallencyItem } from "./ISeriallencyItem";
 
 /**
  * Use this class to serialize a bunch of promises acording to a specific field. Like a in-memory-queue,
@@ -13,10 +12,10 @@ import { SeriallencyItem } from "./SeriallencyItem";
  */
 export class Seriallency extends EventEmitter {
     private queues: {
-        [key: string]: SeriallencyQueueItem[]
+        [key: string]: ISeriallencyItem[]
     };
     private inProcess: {
-        [key: string]: SeriallencyQueueItem
+        [key: string]: ISeriallencyItem
     };
     /**
      * Creates an instance of Seriallency.
@@ -62,11 +61,11 @@ export class Seriallency extends EventEmitter {
      * If queue for that serializeBy is empty, it launch immediatelly the supplied function with the supplied
      * params.
      *
-     * @param {SeriallencyItem} item An object that contains the 'serializeBy' string by which this item must be
+     * @param {ISeriallencyItem} item An object that contains the 'serializeBy' string by which this item must be
      * serialized, the function that must be executed and the params to execute that function.
      * @memberof Seriallency
      */
-    public push(item: SeriallencyItem): void {
+    public push(item: ISeriallencyItem): void {
         if (typeof item !== 'object') {
             throw new Error('"item" to serialize must be an object');
         }
@@ -98,13 +97,13 @@ export class Seriallency extends EventEmitter {
         }
     }
 
-    private onPromiseResolved(item: SeriallencyQueueItem, result: any): void {
+    private onPromiseResolved(item: ISeriallencyItem, result: any): void {
         delete this.inProcess[item.serializeBy];
         this.proceed(item.serializeBy);
         this.emit('resolved', result, item);
     }
 
-    private onPromiseRejected(item: SeriallencyQueueItem, reason: any): void {
+    private onPromiseRejected(item: ISeriallencyItem, reason: any): void {
         delete this.inProcess[item.serializeBy];
         this.proceed(item.serializeBy);
         this.emit('rejected', reason, item);
